@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/schemas/Extractors/CommonExtractor.json",
+  "description": "This is the extractor base class.",
+  "additionalProperties": false,
+  "title": "Extractor Options",
+  "type": "object",
+  "properties": {
+    "base-directory": {
+      "title": "Root Directory Path",
+      "default": "./gallery-dl/",
+      "$ref": "../CustomTypes.json#/Path",
+      "description": "Directory path used as base for all download destinations."
+    },
+    "filename": {
+      "title": "Filename - Format Strings",
+      "description": "The available replacement keys depend on the extractor used. A list of keys for a specific one can be acquired by calling gallery-dl with the ```-K/--list-keywords``` command-line option. \n\n```markdown \n$ gallery-dl -K http://seiga.nicovideo.jp/seiga/im5977527\nKeywords for directory names:\n----------------\ncategory\n  seiga\nsubcategory\n  image\n\nKeywords for filenames:\n-----------------------\ncategory\n  seiga\nextension\n  None\nimage-id\n  5977527\nsubcategory\n  image ```",
+      "oneOf": [
+        {
+          "title": "String",
+          "description": "A format string to build filenames for downloaded files with.",
+          "type": "string",
+          "examples": [
+            "{manga}_c{chapter}_{page:>03}.{extension}"
+          ]
+        },
+        {
+          "title": "Object",
+          "type": "object",
+          "description": "Must contain Python expressions mapping to the filename format strings to use. \nThese expressions are evaluated in the order as specified in Python 3.6+ and in an undetermined order in Python 3.4 and 3.5.\n\n",
+          "examples": [
+            {
+              "extension == 'mp4'": "{id}_video.{extension}",
+              "'nature' in title": "{id}_{title}.{extension}",
+              "": "{id}_default.{extension}"
+            }
+          ]
+        }
+      ]
+    },
+    "directory": {
+      "anyOf": [
+        {
+          "additionalItems": true,
+          "title": "List",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "examples": [
+            ["Manga", "{category}", "{manga}", "c{chapter} - {title}"]
+          ]
+        },
+        {
+          "description": "Format for keys: ```\"python condition\": \"format string\" ```",
+          "title": "Object",
+          "type": "object",
+          "examples": [
+            {
+              "'nature' in content": ["Nature Pictures"],
+              "retweet_id != 0": ["{category}", "{user[name]}", "Retweets"],
+              "": ["{category}", "{user[name]}"]
+            }
+          ]
+        }
+      ]
+    },
+    "parent-directory": {
+      "default": false,
+      "type": "boolean"
+    },
+    "parent-metadata": {
+    }
+  }
+}

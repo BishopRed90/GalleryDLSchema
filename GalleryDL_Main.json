@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/schemas/gallerydl",
+  "title": "Gallery-DL - Configuration",
+  "description": "Still Good",
+  "additionalProperties": false,
+  "default": false,
+  "type": "object",
+  "properties": {
+    "extractor": {
+      "$ref": "Extractors/CommonExtractor.json"
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/schema#",
+  "$id": "Tnst",
+  "title": "Gallery-DL Schema",
+  "description": "This will define the configuration schema for the gallery-dl tool.",
+  "type": "object",
+  "properties": {
+    "extractor": {},
+    "downloader": {},
+    "output": {},
+    "postprocessor": {}
+  }
+}

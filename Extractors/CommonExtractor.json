@@ -1,0 +1,115 @@
+{
+  "type": "object",
+  "properties": {
+    "base-directory": {
+      "anyOf": [
+        {
+          "type": "string",
+          "title": "String",
+          "description": "A format string to build directory names for downloaded files with.",
+          "examples": [
+            "$HOME/Downloads",
+            "~/path/to/download",
+            "C:\\Users\\User\\Downloads"
+          ]
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "title": "List of Strings",
+          "description": "A list with each part of the path as a separate string.",
+          "examples": [
+            [
+              "$HOME",
+              "Downloads",
+              "Location"
+            ]
+          ]
+        }
+      ],
+      "default": "./gallery-dl/",
+      "description": "\nDirectory path used as base for all download destinations. A Path is a ``string`` representing the location of a file or directory.\n\nSimple [tilde expansion](https://docs.python.org/3/library/os.path.html#os.path.expanduser) and [environment variable expansion](\nhttps://docs.python.org/3/library/os.path.html#os.path.expandvars) is supported.\n\nIn Windows environments, backslashes (``\"\\\"``) can, in addition to forward slashes (``\"/\"``), be used as path separators. Because backslashes are JSON's \nescape character, they themselves have to be escaped. \nThe path ``C:\\path\\to\\file.ext`` has therefore to be written as ``\"C:\\\\path\\\\to\\\\file.ext\"`` if you want to use backslashes.\n",
+      "title": "Base-Directory"
+    },
+    "filename": {
+      "anyOf": [
+        {
+          "type": "string",
+          "title": "String",
+          "description": "A format string to build filenames for downloaded files with.",
+          "examples": [
+            "{category}/{subcategory}/{image-id}.{extension}"
+          ]
+        },
+        {
+          "type": "object",
+          "title": "Object",
+          "description": "Must contain Python expressions mapping to the filename format strings to use.\n                    These expressions are evaluated in the order as specified in Python 3.6+ and in an undetermined order\n                    in Python 3.4 and 3.5.",
+          "examples": [
+            {
+              "extension == 'mp4'": "{id}_video.{extension}",
+              "'nature' in title": "{id}_{title}.{extension}",
+              "": "{id}_default.{extension}"
+            }
+          ]
+        }
+      ],
+      "title": "Filename - Format Strings",
+      "description": "\nThe available replacement keys depend on the extractor used. \nA list of keys for a specific one can be acquired by calling gallery-dl with the ```-K/--list-keywords``` \ncommand-line option.\n\n```markdown \n$ gallery-dl -K https://seiga.nicovideo.jp/seiga/im5977527\nKeywords for directory names:\n----------------\ncategory\n  seiga\nsubcategory\n  image\n\nKeywords for filenames:\n-----------------------\ncategory\n  seiga\nextension\n  None\nimage-id\n  5977527\nsubcategory\n  image ```\n"
+    },
+    "directory": {
+      "anyOf": [
+        {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "title": "List of Strings",
+          "description": "A list with each part of the path as a separate string.",
+          "examples": [
+            [
+              "Manga",
+              "{category}",
+              "{manga}",
+              "c{chapter} - {title}"
+            ]
+          ],
+          "additionalItems": true
+        },
+        {
+          "title": "Object",
+          "description": "Must contain Python expressions mapping to the filename format strings to use.\n                    These expressions are evaluated in the order as specified in Python 3.6+ and in an undetermined order\n                    in Python 3.4 and 3.5.",
+          "examples": [
+            {
+              "'nature' in content": [
+                "Nature Pictures"
+              ],
+              "retweet_id != 0": [
+                "{category}",
+                "{user[name]}",
+                "Retweets"
+              ],
+              "": [
+                "{category}",
+                "{user[name]}"
+              ]
+            }
+          ]
+        }
+      ],
+      "description": "\nA list of format strings to build target directory paths with.\n\nIf this is an object, it must contain Python expressions mapping to the list of format strings to use.\n\nEach individual string in such a list represents a single path segment, which will be joined together and appended to the base-directory \nto form the complete target directory path.\n",
+      "title": "Directory"
+    }
+  },
+  "required": [
+    "filename",
+    "directory"
+  ],
+  "title": "Extractor",
+  "description": "Each extractor is identified by its ``category`` and ``subcategory``. The ``category`` is the lowercase site name\nwithout any spaces or special characters, which is usually just the module name (``pixiv``, ``danbooru``,...).\nThe ``subcategory`` is a lowercase word describing the general functionality of that extractor (``user``,\n``favorite``, ``manga``, ...).\n\nEach one of the following options can be specified on multiple levels of the configuration tree:\n\n================== =======\nBase level:        ``extractor.<option-name>``\nCategory level:    ``extractor.<category>.<option-name>``\nSubcategory level: ``extractor.<category>.<subcategory>.<option-name>``\n================== =======\n\nA value in a \"deeper\" level hereby overrides a value of the same name on a lower level. Setting the\n``extractor.pixiv.filename`` value, for example, lets you specify a general filename pattern for all the\ndifferent pixiv extractors. Using the ``extractor.pixiv.user.filename`` value lets you override this general\npattern specifically for ``PixivUserExtractor`` instances.\n\nThe ``category`` and ``subcategory`` of all extractors are included in the output of ``gallery-dl\n--list-extractors``.\nFor a specific URL these values can also be determined by using the ``-K``/``--list-keywords``\ncommand-line option (see the example below).\n    ",
+  "additionalProperties": false,
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/schemas/Extractors/CommonExtractor.json"
+}

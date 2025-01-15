@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/schemas/CustomTypes.json",
+  "title": "Gallery-DL - Custom Types",
+  "Date": {
+    "type": [
+      "string",
+      "integer"
+    ]
+  },
+  "Duration": {
+    "type": [
+      "number",
+      "string",
+      "array"
+    ],
+    "items": {
+      "type": "number"
+    },
+    "minItems": 2,
+    "maxItems": 2
+  },
+  "Path": {
+    "type": [
+      "string",
+      "array"
+    ],
+    "items": {
+      "type": "string"
+    },
+    "examples": [
+      "$HOME/path/to/file.ext",
+      ["$HOME", "path", "to", "file.ext"]
+    ]
+  }
+}
